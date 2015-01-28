@@ -10,10 +10,6 @@ public class RoomService {
     @Autowired
     RoomRepo roomRepo;
 
-    public void create() {
-
-    }
-
     public List<Room> findAll() {
         return roomRepo.findAll();
     }

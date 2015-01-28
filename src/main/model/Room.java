@@ -26,7 +26,7 @@ public class Room {
     @Reference
     @Enumerated(EnumType.STRING)
     @Column(name = "room_type")
-    private RoomType roomType;
+    private RoomCategory roomCategory;
 
     public Room() {
     }
@@ -63,11 +63,11 @@ public class Room {
         this.noOfSeats = noOfSeats;
     }
 
-    public RoomType getRoomType() {
-        return roomType;
+    public RoomCategory getRoomCategory() {
+        return roomCategory;
     }
 
-    public void setRoomType(RoomType roomType) {
-        this.roomType = roomType;
+    public void setRoomCategory(RoomCategory roomCategory) {
+        this.roomCategory = roomCategory;
     }
 }
