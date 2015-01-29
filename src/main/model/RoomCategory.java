@@ -15,7 +15,6 @@ public class RoomCategory {
     @Column(name = "id")
     private int id;
 
-
     @Reference
     @Enumerated(EnumType.STRING)
     @Column(name = "category",unique = true,nullable = false)

@@ -1,10 +1,9 @@
 package main.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.hibernate.validator.constraints.Email;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="\"user\"")
@@ -16,12 +15,17 @@ public class User {
     private int id;
 
     @Column(name = "mail")
+    @NotNull
+    @Email
     private String mail;
 
     @Column(name = "name")
+    @NotNull
+    @Size(max = 25)
     private String name;
 
     @Column(name = "password")
+    @NotNull
     private String password;
 
     public User() {

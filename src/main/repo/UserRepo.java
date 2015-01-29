@@ -24,7 +24,6 @@ public class UserRepo {
         session.close();
     }
 
-
     public List<User> findByMail(String mail) {
         Session session = sessionFactory.openSession();
         Criteria criteria  = session.createCriteria(User.class);

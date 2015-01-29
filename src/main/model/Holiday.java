@@ -1,6 +1,8 @@
 package main.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
@@ -12,10 +14,13 @@ public class Holiday {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "date",unique = true,nullable = false)
+    @Column(name = "date",unique = true)
+    @NotNull
     private Date holiday;
 
     @Column(name="reason")
+    @NotNull
+    @Size(max = 100)
     private String reason;
 
     public Holiday() {

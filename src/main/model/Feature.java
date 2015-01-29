@@ -1,6 +1,8 @@
 package main.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "feature")
@@ -11,6 +13,8 @@ public class Feature {
     private int id;
 
     @Column(name = "description")
+    @NotNull
+    @Size(max = 100)
     private String description;
 
     public Feature() {

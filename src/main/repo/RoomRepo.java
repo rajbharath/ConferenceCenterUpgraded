@@ -1,6 +1,7 @@
 package main.repo;
 
 import main.model.Room;
+import main.model.RoomCategoryName;
 import main.model.User;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -46,5 +47,12 @@ public class RoomRepo {
         session.update(room);
         transaction.commit();
         session.close();
+    }
+
+    public List<Room> findByCategory(RoomCategoryName category) {
+        Session session = sessionFactory.openSession();
+        List<Room> rooms = session.createQuery("from Room R where R.roomCategory.category= :category").setParameter("category",category).list();
+        session.close();
+        return rooms;
     }
 }

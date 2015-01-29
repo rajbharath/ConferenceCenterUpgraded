@@ -1,6 +1,8 @@
 package main.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -15,19 +17,25 @@ public class Booking {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @Column(name = "user_id")
+    @NotNull
     private User user;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @Column(name="room_id")
+    @NotNull
     private Room room;
 
     @Column(name="from_date")
+    @NotNull
     private Date fromDate;
 
     @Column(name="to_date")
+    @NotNull
     private Date toDate;
 
     @Column(name="amount")
+    @NotNull
+    @Min(value = 1)
     private BigDecimal amount;
 
 

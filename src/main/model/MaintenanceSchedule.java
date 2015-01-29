@@ -1,32 +1,36 @@
 package main.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
 @Table(name = "maintenance_schedule",uniqueConstraints = {@UniqueConstraint(columnNames = {"start_date","end_date","room_id"})})
 public class MaintenanceSchedule {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 
-
     @Column(name = "start_date")
+    @NotNull
     private Date startDate;
 
     @Column(name = "end_date")
+    @NotNull
     private Date endDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @Column(name="room_id")
+    @NotNull
     private Room room;
 
     @Column(name="description")
+    @NotNull
+    @Size(max = 100)
     private String description;
-
 
     public MaintenanceSchedule() {
     }
