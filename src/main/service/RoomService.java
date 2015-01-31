@@ -4,9 +4,11 @@ import main.model.Room;
 import main.model.RoomCategoryName;
 import main.repo.RoomRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class RoomService {
 
     @Autowired
