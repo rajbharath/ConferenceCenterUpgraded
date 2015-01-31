@@ -20,39 +20,30 @@ public class RoomRepo {
     SessionFactory sessionFactory;
 
     public void save(Room room) {
-        Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
+        Session session = sessionFactory.getCurrentSession();
         session.saveOrUpdate(room);
-        transaction.commit();
-        session.close();
     }
 
     public Room findById(int id) {
-        Session session = sessionFactory.openSession();
+        Session session = sessionFactory.getCurrentSession();
         Room room = (Room) session.createQuery("from Room R where id = :id").setParameter("id", id).uniqueResult();
-        session.close();
         return room;
     }
 
     public List<Room> findAll() {
-        Session session = sessionFactory.openSession();
+        Session session = sessionFactory.getCurrentSession();
         List<Room> rooms = session.createQuery("from Room").list();
-        session.close();
         return rooms;
     }
 
     public void update(Room room) {
-        Session session = sessionFactory.openSession();
-        Transaction transaction = session.beginTransaction();
+        Session session = sessionFactory.getCurrentSession();
         session.update(room);
-        transaction.commit();
-        session.close();
     }
 
     public List<Room> findByCategory(RoomCategoryName category) {
-        Session session = sessionFactory.openSession();
+        Session session = sessionFactory.getCurrentSession();
         List<Room> rooms = session.createQuery("from Room R where R.roomCategory.category= :category").setParameter("category",category).list();
-        session.close();
         return rooms;
     }
 }

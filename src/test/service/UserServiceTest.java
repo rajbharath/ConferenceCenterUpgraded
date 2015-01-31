@@ -1,5 +1,6 @@
 package test.service;
 
+import main.service.TestTransaction;
 import main.service.UserService;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -19,10 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.validation.ConstraintViolationException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:/spring-test.xml")
-@TransactionConfiguration(transactionManager = "transactionManager", defaultRollback = true)
-@Transactional
-public class UserServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
+@TestTransaction
+public class UserServiceTest {
 
     @Autowired
     UserService userService;
