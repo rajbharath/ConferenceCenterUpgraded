@@ -23,7 +23,6 @@ public class MaintenanceSchedule {
     private Date endDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @Column(name="room_id")
     @NotNull
     private Room room;
 

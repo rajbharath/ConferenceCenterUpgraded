@@ -7,33 +7,31 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-@Table(name="booking",uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id","room_id","from_date","to_date"})})
+@Table(name = "booking", uniqueConstraints = {@UniqueConstraint(columnNames = {"room_id", "from_date", "to_date"})})
 public class Booking {
-
+    //TODO unqiueconstraint should be corrected
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @Column(name = "user_id")
     @NotNull
     private User user;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @Column(name="room_id")
     @NotNull
     private Room room;
 
-    @Column(name="from_date")
+    @Column(name = "from_date")
     @NotNull
     private Date fromDate;
 
-    @Column(name="to_date")
+    @Column(name = "to_date")
     @NotNull
     private Date toDate;
 
-    @Column(name="amount")
+    @Column(name = "amount")
     @NotNull
     @Min(value = 1)
     private BigDecimal amount;

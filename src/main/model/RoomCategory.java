@@ -20,7 +20,7 @@ public class RoomCategory {
     @Column(name = "category",unique = true,nullable = false)
     private RoomCategoryName category;
 
-    @OneToMany(mappedBy = "feature")
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Feature> features = new ArrayList<Feature>();
 
     public RoomCategory() {

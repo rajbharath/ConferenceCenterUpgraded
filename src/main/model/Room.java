@@ -1,7 +1,5 @@
 package main.model;
 
-import jdk.nashorn.internal.ir.annotations.Reference;
-
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
@@ -30,12 +28,10 @@ public class Room {
 
     @Column(name = "no_of_seats")
     @Min(value = 1)
-    @Digits(integer = 4,fraction = 0)
+    @Digits(integer = 4, fraction = 0)
     private int noOfSeats;
 
-    @Reference
-    @Enumerated(EnumType.STRING)
-    @Column(name = "room_type")
+    @OneToOne
     private RoomCategory roomCategory;
 
     public Room() {

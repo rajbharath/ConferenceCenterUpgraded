@@ -22,6 +22,12 @@
         <property name="annotatedClasses">
             <list>
                 <value>main.model.User</value>
+                <value>main.model.Room</value>
+                <value>main.model.RoomCategory</value>
+                <value>main.model.Booking</value>
+                <value>main.model.Feature</value>
+                <value>main.model.Holiday</value>
+                <value>main.model.MaintenanceSchedule</value>
             </list>
         </property>
         <property name="hibernateProperties">
