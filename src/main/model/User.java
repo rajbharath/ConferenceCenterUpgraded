@@ -1,9 +1,9 @@
 package main.model;
 
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -18,16 +18,18 @@ public class User {
 
     @Column(name = "mail")
     @NotNull
-    @Email
+    @Email(regexp = "[-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+\\.[a-zA-Z]{2,4}")
     private String mail;
 
     @Column(name = "name")
     @NotNull
+    @NotBlank
     @Size(max = 25)
     private String name;
 
     @Column(name = "password")
     @NotNull
+    @Size(min = 8)
     private String password;
 
     public User() {
