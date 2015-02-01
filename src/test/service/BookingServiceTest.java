@@ -95,18 +95,19 @@ public class BookingServiceTest {
     }
 
     @Test
-    public void shouldNotBookSameRoomTwiceInSameTime() throws Exception {
+    public void shouldNotBookSameRoomTwiceInSameTimePeriod() throws Exception {
         thrown.expect(Exception.class);
-        thrown.expectMessage("Room is not available");
+        thrown.expectMessage("Room has been already booked for this period");
         bookingService.create(userId, roomId, fromDate, toDate, new BigDecimal("40000.00"));
         bookingService.create(userId, roomId, fromDate, toDate, new BigDecimal("40000.00"));
     }
 
     @Test
     public void shouldBookingNotAvailable() throws Exception {
+        thrown.expect(Exception.class);
+        thrown.expectMessage("Room has been already booked for this period");
         bookingService.create(userId, roomId, fromDate, toDate, new BigDecimal("40000.00"));
-        Assert.assertFalse(bookingService.isAvailable(roomId, fromDate, toDate));
-
+        bookingService.isAvailable(roomId,fromDate,toDate);
     }
 
     @Test
@@ -118,14 +119,14 @@ public class BookingServiceTest {
     @Test
     public void shouldThrowExceptionBookingOnHoliday() throws Exception {
         thrown.expect(Exception.class);
-        thrown.expectMessage("Room is not available");
+        thrown.expectMessage("Room can not be booked on holiday");
         bookingService.create(userId, roomId, fromDate, holiday, new BigDecimal("40000.00"));
     }
 
     @Test
     public void shouldThrowExceptionBookingOnScheduledMaintenance() throws Exception {
         thrown.expect(Exception.class);
-        thrown.expectMessage("Room is not available");
+        thrown.expectMessage("Room has scheduled maintenance in this period");
         bookingService.create(userId, roomId, maintenanceStartDate, maintenanceEndDate, new BigDecimal("40000.00"));
     }
 }

@@ -43,8 +43,8 @@ public class BookingService {
         booking.setFromDate(fromDate);
         booking.setToDate(toDate);
         booking.setAmount(amount);
-        if (!isAvailable(roomId, fromDate, toDate)) throw new Exception("Room is not available");
-        bookingRepo.save(booking);
+        if (isAvailable(roomId, fromDate, toDate))
+            bookingRepo.save(booking);
     }
 
     public List<Booking> findByUser(int userId) {
@@ -52,10 +52,12 @@ public class BookingService {
         return bookingRepo.findByUser(user);
     }
 
-    public boolean isAvailable(int roomId, Date fromDate, Date toDate) {
-        if (hasHolidayBetween(fromDate, toDate)) return false;
-        if (hasMaintenanceBetween(roomId, fromDate, toDate)) return false;
-        if (isBookedBetween(roomId, fromDate, toDate)) return false;
+    public boolean isAvailable(int roomId, Date fromDate, Date toDate) throws Exception {
+        if (hasHolidayBetween(fromDate, toDate)) throw new Exception("Room can not be booked on holiday");
+        if (hasMaintenanceBetween(roomId, fromDate, toDate))
+            throw new Exception("Room has scheduled maintenance in this period");
+        if (isBookedBetween(roomId, fromDate, toDate))
+            throw new Exception("Room has been already booked for this period");
         return true;
     }
 
@@ -74,7 +76,7 @@ public class BookingService {
 
     private boolean isBookedBetween(int roomId, Date fromDate, Date toDate) {
         Room room = roomService.findBy(roomId);
-        List<Booking> bookings = bookingRepo.findBookingByConflicts(room,fromDate, toDate);
+        List<Booking> bookings = bookingRepo.findBookingByConflicts(room, fromDate, toDate);
         return bookings.size() > 0;
     }
 }
