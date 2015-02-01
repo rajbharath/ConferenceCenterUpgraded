@@ -7,15 +7,16 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
-@Table(name = "booking", uniqueConstraints = {@UniqueConstraint(columnNames = {"room_id", "from_date", "to_date"})})
+@Table(name = "booking", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id","room_id","from_date", "to_date"})})
 public class Booking {
-    //TODO unqiueconstraint should be corrected
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER,targetEntity = User.class)
+    @JoinColumn(name = "user_id")
     @NotNull
     private User user;
 

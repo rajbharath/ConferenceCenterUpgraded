@@ -1,10 +1,10 @@
 package main.model;
 
+import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.format.annotation.NumberFormat;
+
 import javax.persistence.*;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 
 @Entity
@@ -16,17 +16,17 @@ public class Room {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "name")
-    @NotNull
+    @Column(name = "name",unique = true,nullable = false)
+    @NotBlank
     @Size(max = 10)
     private String name;
 
-    @Column(name = "charge_per_hour")
+    @Column(name = "charge_per_hour",nullable = false)
+    @NumberFormat(style = NumberFormat.Style.CURRENCY)
     @NotNull
-    @Min(value = 1)
     private BigDecimal chargePerHour;
 
-    @Column(name = "no_of_seats")
+    @Column(name = "no_of_seats",nullable = false)
     @Min(value = 1)
     @Digits(integer = 4, fraction = 0)
     private int noOfSeats;

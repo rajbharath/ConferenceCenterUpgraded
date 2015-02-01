@@ -16,7 +16,7 @@ public class User {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "mail")
+    @Column(name = "mail",unique = true)
     @NotNull
     @Email(regexp = "[-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+\\.[a-zA-Z]{2,4}")
     private String mail;

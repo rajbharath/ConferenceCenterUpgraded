@@ -21,9 +21,16 @@ public class BookingService {
     @Autowired
     UserRepo userRepo;
 
+    @Autowired
+    UserService userService;
 
-    public void create(User user,Room room,Date fromDate,Date toDate,BigDecimal amount){
+    @Autowired
+    RoomService roomService;
+
+    public void create(int userId,int roomId,Date fromDate,Date toDate,BigDecimal amount){
         Booking booking = new Booking();
+        User user = userService.findById(userId);
+        Room room = roomService.findBy(roomId);
         booking.setUser(user);
         booking.setRoom(room);
         booking.setFromDate(fromDate);
@@ -37,4 +44,11 @@ public class BookingService {
         return bookingRepo.findByUser(user);
     }
 
+    public boolean isAvailable(int roomId, Date fromDate, Date toDate) {
+        Room room = roomService.findBy(roomId);
+        List<Booking> bookings = bookingRepo.findBookingByConflicts(room, fromDate, toDate);
+        for(Booking b:bookings)
+        System.out.print("room : " + b.getRoom()+" from date : " + b.getFromDate()+" to date : " + b.getToDate());
+        return bookings.size() == 0;
+    }
 }

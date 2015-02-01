@@ -22,12 +22,10 @@ public class UserRepo {
         session.saveOrUpdate(user);
     }
 
-    public List<User> findByMail(String mail) {
+    public User findByMail(String mail) {
         Session session = sessionFactory.getCurrentSession();
-        Criteria criteria  = session.createCriteria(User.class);
-        criteria.add(Restrictions.like("mail","%"+mail+"%"));
-        List<User> users = criteria.list();
-        return users;
+        User user = (User) session.createQuery("from User U where mail = :mail").setParameter("mail", mail).uniqueResult();
+        return user;
     }
 
     public User findById(int id) {

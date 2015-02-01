@@ -24,7 +24,7 @@ public class UserService {
         return findById(user.getId());
     }
 
-    public List<User> findByMail(String mail) {
+    public User findByMail(String mail) {
         return userRepo.findByMail(mail);
     }
 

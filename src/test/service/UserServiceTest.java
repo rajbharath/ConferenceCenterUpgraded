@@ -32,7 +32,7 @@ public class UserServiceTest {
     @Test
     public void shouldCreateUser() {
         userService.create("raj", "raj115@bharath.com", "abcd1234");
-        Assert.assertTrue(userService.findByMail("raj115@bharath.com").size() > 0);
+        Assert.assertNotNull(userService.findByMail("raj115@bharath.com"));
     }
 
     @Test
