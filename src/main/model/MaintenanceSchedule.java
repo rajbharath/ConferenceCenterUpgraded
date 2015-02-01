@@ -6,7 +6,7 @@ import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
-@Table(name = "maintenance_schedule",uniqueConstraints = {@UniqueConstraint(columnNames = {"start_date","end_date","room_id"})})
+@Table(name = "maintenance_schedule",uniqueConstraints = {@UniqueConstraint(columnNames = {"from_date","to_date","room_id"})})
 public class MaintenanceSchedule {
 
     @Id
@@ -14,13 +14,13 @@ public class MaintenanceSchedule {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "start_date")
+    @Column(name = "from_date")
     @NotNull
-    private Date startDate;
+    private Date fromDate;
 
-    @Column(name = "end_date")
+    @Column(name = "to_date")
     @NotNull
-    private Date endDate;
+    private Date toDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @NotNull
@@ -42,20 +42,20 @@ public class MaintenanceSchedule {
         this.id = id;
     }
 
-    public Date getStartDate() {
-        return startDate;
+    public Date getFromDate() {
+        return fromDate;
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
+    public void setFromDate(Date fromDate) {
+        this.fromDate = fromDate;
     }
 
-    public Date getEndDate() {
-        return endDate;
+    public Date getToDate() {
+        return toDate;
     }
 
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
+    public void setToDate(Date toDate) {
+        this.toDate = toDate;
     }
 
     public Room getRoom() {

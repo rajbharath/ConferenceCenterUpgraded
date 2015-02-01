@@ -1,6 +1,7 @@
 package main.service;
 
 import main.model.Booking;
+import main.model.MaintenanceSchedule;
 import main.model.Room;
 import main.model.User;
 import main.repo.BookingRepo;
@@ -30,6 +31,9 @@ public class BookingService {
     @Autowired
     HolidayService holidayService;
 
+    @Autowired
+    MaintenanceScheduleService maintenanceScheduleService;
+
     public void create(int userId, int roomId, Date fromDate, Date toDate, BigDecimal amount) throws Exception {
         Booking booking = new Booking();
         User user = userService.findById(userId);
@@ -56,22 +60,21 @@ public class BookingService {
     }
 
     private boolean hasHolidayBetween(Date fromDate, Date toDate) {
-
         if (holidayService.findAllBetween(fromDate, toDate).size() > 0) return true;
-
         return false;
     }
 
     private boolean hasMaintenanceBetween(int roomId, Date fromDate, Date toDate) {
-
+        List<MaintenanceSchedule> maintenanceSchedules = maintenanceScheduleService.findBetween(roomId, fromDate, toDate);
+        for (MaintenanceSchedule s : maintenanceSchedules)
+            System.out.println("room : " + s.getRoom() + " fromdate : " + s.getFromDate() + " todate : " + s.getToDate());
+        if (maintenanceSchedules.size() > 0) return true;
         return false;
     }
 
     private boolean isBookedBetween(int roomId, Date fromDate, Date toDate) {
         Room room = roomService.findBy(roomId);
-        List<Booking> bookings = bookingRepo.findBookingByConflicts(room, fromDate, toDate);
-        for (Booking b : bookings)
-            System.out.print("room : " + b.getRoom() + " from date : " + b.getFromDate() + " to date : " + b.getToDate());
-        return bookings.size() == 0;
+        List<Booking> bookings = bookingRepo.findBookingByConflicts(room,fromDate, toDate);
+        return bookings.size() > 0;
     }
 }

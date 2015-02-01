@@ -3,7 +3,6 @@ package test.service;
 import junit.framework.Assert;
 import main.service.*;
 import org.hibernate.SessionFactory;
-import org.hibernate.exception.ConstraintViolationException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -36,6 +35,9 @@ public class BookingServiceTest {
     HolidayService holidayService;
 
     @Autowired
+    MaintenanceScheduleService maintenanceScheduleService;
+
+    @Autowired
     SessionFactory sessionFactory;
 
     private int userId;
@@ -44,6 +46,9 @@ public class BookingServiceTest {
     private Date toDate;
     private Date greaterThanToDate;
     private Date holiday;
+    private Date maintenanceStartDate;
+    private Date maintenanceEndDate;
+
 
     @Before
     public void setUp() {
@@ -51,7 +56,9 @@ public class BookingServiceTest {
         userId = userService.findByMail("raj@thoughtworks.com").getId();
         roomService.create("202", new BigDecimal("500.00"), 40, 1);
         roomId = roomService.findByName("202").getId();
+
         fromDate = Calendar.getInstance().getTime();
+
         Calendar toDatecalendar = Calendar.getInstance();
         toDatecalendar.add(Calendar.HOUR_OF_DAY, 1);
         toDatecalendar.add(Calendar.DAY_OF_MONTH, 1);
@@ -66,6 +73,19 @@ public class BookingServiceTest {
         holidayCalendar.add(Calendar.DAY_OF_MONTH, 4);
         holiday = holidayCalendar.getTime();
         holidayService.create(holiday, "Holiday");
+
+        Calendar maintenanceDateCalendar = Calendar.getInstance();
+        maintenanceDateCalendar.add(Calendar.DAY_OF_MONTH, 10);
+        maintenanceDateCalendar.set(Calendar.HOUR_OF_DAY, 0);
+        maintenanceDateCalendar.set(Calendar.MINUTE, 0);
+        maintenanceStartDate = maintenanceDateCalendar.getTime();
+
+        Calendar maintenanceEndDateCalendar = Calendar.getInstance();
+        maintenanceEndDateCalendar.add(Calendar.DAY_OF_MONTH, 11);
+        maintenanceEndDateCalendar.set(Calendar.HOUR_OF_DAY, 0);
+        maintenanceEndDateCalendar.set(Calendar.MINUTE, 0);
+        maintenanceEndDate = maintenanceEndDateCalendar.getTime();
+        maintenanceScheduleService.create(roomId, maintenanceStartDate, maintenanceEndDate, "Its a scheduled maintenance");
     }
 
     @Test
@@ -100,5 +120,12 @@ public class BookingServiceTest {
         thrown.expect(Exception.class);
         thrown.expectMessage("Room is not available");
         bookingService.create(userId, roomId, fromDate, holiday, new BigDecimal("40000.00"));
+    }
+
+    @Test
+    public void shouldThrowExceptionBookingOnScheduledMaintenance() throws Exception {
+        thrown.expect(Exception.class);
+        thrown.expectMessage("Room is not available");
+        bookingService.create(userId, roomId, maintenanceStartDate, maintenanceEndDate, new BigDecimal("40000.00"));
     }
 }

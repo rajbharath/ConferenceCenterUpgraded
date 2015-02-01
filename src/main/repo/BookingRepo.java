@@ -1,9 +1,11 @@
 package main.repo;
 
 import main.model.Booking;
+import main.model.MaintenanceSchedule;
 import main.model.Room;
 import main.model.User;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -43,8 +45,7 @@ public class BookingRepo {
 
     public List<Booking> findBookingByConflicts(Room room, Date fromDate, Date toDate) {
         Session session = sessionFactory.getCurrentSession();
-        Criteria criteria = session.createCriteria(Booking.class);
-        criteria.add(Restrictions.eq("room", room)).add(Restrictions.disjunction().add(Restrictions.conjunction(Restrictions.le("fromDate", toDate)).add(Restrictions.ge("fromDate", fromDate))).add(Restrictions.conjunction(Restrictions.gt("fromDate", fromDate))));
-        return criteria.list();
+        Query query = session.createSQLQuery("select * from booking b where b.room_id = :room and ((b.from_date <= :toDate and b.from_date >= :fromDate) or (b.to_date > :fromDate and b.to_date < :toDate))").addEntity(Booking.class).setParameter("room",room).setParameter("fromDate",fromDate).setParameter("toDate",toDate);
+        return query.list();
     }
 }
