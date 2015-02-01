@@ -1,20 +1,15 @@
 package test.service;
 
 import junit.framework.Assert;
-import main.service.BookingService;
-import main.service.RoomService;
-import main.service.TestTransaction;
-import main.service.UserService;
+import main.service.*;
 import org.hibernate.SessionFactory;
 import org.hibernate.exception.ConstraintViolationException;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
@@ -38,6 +33,9 @@ public class BookingServiceTest {
     UserService userService;
 
     @Autowired
+    HolidayService holidayService;
+
+    @Autowired
     SessionFactory sessionFactory;
 
     private int userId;
@@ -45,6 +43,7 @@ public class BookingServiceTest {
     private Date fromDate;
     private Date toDate;
     private Date greaterThanToDate;
+    private Date holiday;
 
     @Before
     public void setUp() {
@@ -61,31 +60,45 @@ public class BookingServiceTest {
         greaterThanToDateCalendar.add(Calendar.HOUR_OF_DAY, 1);
         greaterThanToDateCalendar.add(Calendar.DAY_OF_MONTH, 2);
         greaterThanToDate = toDatecalendar.getTime();
+
+        Calendar holidayCalendar = Calendar.getInstance();
+        holidayCalendar.add(Calendar.HOUR_OF_DAY, 1);
+        holidayCalendar.add(Calendar.DAY_OF_MONTH, 4);
+        holiday = holidayCalendar.getTime();
+        holidayService.create(holiday, "Holiday");
     }
 
     @Test
-    public void shouldBookRoom() {
+    public void shouldBookRoom() throws Exception {
         bookingService.create(userId, roomId, fromDate, toDate, new BigDecimal("40000.00"));
-        Assert.assertNotNull("Booking failed",bookingService.findByUser(userId));
+        Assert.assertNotNull("Booking failed", bookingService.findByUser(userId));
     }
 
     @Test
-    public void shouldNotBookSameRoomTwiceInSameTime() {
-        thrown.expect(ConstraintViolationException.class);
-        thrown.expectMessage("could not execute statement");
+    public void shouldNotBookSameRoomTwiceInSameTime() throws Exception {
+        thrown.expect(Exception.class);
+        thrown.expectMessage("Room is not available");
         bookingService.create(userId, roomId, fromDate, toDate, new BigDecimal("40000.00"));
         bookingService.create(userId, roomId, fromDate, toDate, new BigDecimal("40000.00"));
     }
 
     @Test
-    public void shouldBookingNotAvailable() {
+    public void shouldBookingNotAvailable() throws Exception {
         bookingService.create(userId, roomId, fromDate, toDate, new BigDecimal("40000.00"));
         Assert.assertFalse(bookingService.isAvailable(roomId, fromDate, toDate));
+
     }
 
     @Test
-    public void shouldBookingBeAvailable() {
+    public void shouldBookingBeAvailable() throws Exception {
         bookingService.create(userId, roomId, fromDate, toDate, new BigDecimal("40000.00"));
         Assert.assertTrue(bookingService.isAvailable(roomId, toDate, greaterThanToDate));
+    }
+
+    @Test
+    public void shouldThrowExceptionBookingOnHoliday() throws Exception {
+        thrown.expect(Exception.class);
+        thrown.expectMessage("Room is not available");
+        bookingService.create(userId, roomId, fromDate, holiday, new BigDecimal("40000.00"));
     }
 }

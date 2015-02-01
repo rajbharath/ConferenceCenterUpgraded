@@ -27,7 +27,10 @@ public class BookingService {
     @Autowired
     RoomService roomService;
 
-    public void create(int userId,int roomId,Date fromDate,Date toDate,BigDecimal amount){
+    @Autowired
+    HolidayService holidayService;
+
+    public void create(int userId, int roomId, Date fromDate, Date toDate, BigDecimal amount) throws Exception {
         Booking booking = new Booking();
         User user = userService.findById(userId);
         Room room = roomService.findBy(roomId);
@@ -36,19 +39,39 @@ public class BookingService {
         booking.setFromDate(fromDate);
         booking.setToDate(toDate);
         booking.setAmount(amount);
+        if (!isAvailable(roomId, fromDate, toDate)) throw new Exception("Room is not available");
         bookingRepo.save(booking);
     }
 
-    public List<Booking> findByUser(int userId){
+    public List<Booking> findByUser(int userId) {
         User user = userRepo.findById(userId);
         return bookingRepo.findByUser(user);
     }
 
     public boolean isAvailable(int roomId, Date fromDate, Date toDate) {
+        if (hasHolidayBetween(fromDate, toDate)) return false;
+        if (hasMaintenanceBetween(roomId, fromDate, toDate)) return false;
+        if (isBookedBetween(roomId, fromDate, toDate)) return false;
+        return true;
+    }
+
+    private boolean hasHolidayBetween(Date fromDate, Date toDate) {
+
+        if (holidayService.findAllBetween(fromDate, toDate).size() > 0) return true;
+
+        return false;
+    }
+
+    private boolean hasMaintenanceBetween(int roomId, Date fromDate, Date toDate) {
+
+        return false;
+    }
+
+    private boolean isBookedBetween(int roomId, Date fromDate, Date toDate) {
         Room room = roomService.findBy(roomId);
         List<Booking> bookings = bookingRepo.findBookingByConflicts(room, fromDate, toDate);
-        for(Booking b:bookings)
-        System.out.print("room : " + b.getRoom()+" from date : " + b.getFromDate()+" to date : " + b.getToDate());
+        for (Booking b : bookings)
+            System.out.print("room : " + b.getRoom() + " from date : " + b.getFromDate() + " to date : " + b.getToDate());
         return bookings.size() == 0;
     }
 }
