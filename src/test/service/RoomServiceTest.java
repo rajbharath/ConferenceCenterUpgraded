@@ -9,7 +9,9 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.BeforeTransaction;
 
 import java.math.BigDecimal;
 
@@ -25,6 +27,8 @@ public class RoomServiceTest {
     @Test
     public void shouldCreateRoom() {
         roomService.create("100A",new BigDecimal("500.00"),50,1);
-//        Assert.assertTrue(userService.findByMail("raj115@bharath.com").size() > 0);
+        Assert.assertNotNull(roomService.findByName("100A"));
     }
+
+
 }

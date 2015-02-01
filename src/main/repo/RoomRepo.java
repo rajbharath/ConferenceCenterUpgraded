@@ -46,4 +46,10 @@ public class RoomRepo {
         List<Room> rooms = session.createQuery("from Room R where R.roomCategory.category= :category").setParameter("category",category).list();
         return rooms;
     }
+
+    public Room findByName(String name) {
+        Session session = sessionFactory.getCurrentSession();
+        Room room = (Room) session.createQuery("from Room R where R.name = :name").setParameter("name",name).uniqueResult();
+        return room;
+    }
 }

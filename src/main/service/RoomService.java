@@ -24,6 +24,7 @@ public class RoomService {
         room.setChargePerHour(chargePerHour);
         room.setNoOfSeats(noOfSeats);
         room.setRoomCategory(roomCategoryService.findById(roomCategoryId));
+        roomRepo.save(room);
     }
 
     public List<Room> findAll() {
@@ -36,5 +37,9 @@ public class RoomService {
 
     public List<Room> findBy(RoomCategoryName roomCategoryName) {
         return roomRepo.findByCategory(roomCategoryName);
+    }
+
+    public Room findByName(String name) {
+        return roomRepo.findByName(name);
     }
 }

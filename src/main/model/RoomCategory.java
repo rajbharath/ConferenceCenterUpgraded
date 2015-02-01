@@ -20,7 +20,8 @@ public class RoomCategory {
     @Column(name = "category",unique = true,nullable = false)
     private RoomCategoryName category;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinTable(name = "room_category_feature", joinColumns = {@JoinColumn(name = "room_category_id")}, inverseJoinColumns = {@JoinColumn(name = "feature_id")})
     private List<Feature> features = new ArrayList<Feature>();
 
     public RoomCategory() {
